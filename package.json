@@ -1,0 +1,31 @@
+{
+  "name": "backend_elpino",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Gaby Solutions.",
+  "license": "ISC",
+  "description": "BackEnd para la aplicación web de madererías el pino.",
+  "type": "module",
+  "dependencies": {
+    "@apollo/server": "^4.12.0",
+    "@aws-sdk/client-s3": "^3.872.0",
+    "@formkit/tempo": "^0.1.2",
+    "@graphql-tools/merge": "^9.0.24",
+    "@graphql-tools/schema": "^10.0.23",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "graphql": "^16.10.0",
+    "graphql-tools": "^9.0.18",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.3",
+    "nanoid": "^5.1.5"
+  }
+}
