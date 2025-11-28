@@ -1,14 +1,14 @@
 {
-  "name": "backend_elpino",
+  "name": "backIncidencias",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "keywords": [],
-  "author": "Gaby Solutions.",
+  "author": "fresco.",
   "license": "ISC",
-  "description": "BackEnd para la aplicación web de madererías el pino.",
+  "description": "BackEnd para sitio de incidencias.",
   "type": "module",
   "dependencies": {
     "@apollo/server": "^4.12.0",
