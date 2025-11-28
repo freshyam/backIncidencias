@@ -18,7 +18,7 @@ const authenticationResolver = {
         loginUser: async(_,{input}) => {
             try {
                 const [user] = await connection.query(
-                    `   SELECT id, CONCAT(nombre, " ", aPaterno) AS nombre, usuario, password FROM usuarios WHERE usuario = ? AND password = ? 
+                    `   SELECT id, CONCAT(nombre,' ', aPaterno) AS nombre, usuario, password FROM usuarios WHERE usuario = ? AND password = ? 
                     `,[input.usuario, input.password]
                 );
 
