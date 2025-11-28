@@ -20,7 +20,8 @@ const server = new ApolloServer({
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-const PORT = 4000;
+
+const PORT = process.env.PORT || 4000;
 
 async function startApolloServer() {
   await server.start();
@@ -46,9 +47,11 @@ async function startApolloServer() {
   );
 
   await new Promise((resolve) =>
-    httpServer.listen({ port: PORT }, resolve)
+    httpServer.listen(PORT, () => {
+      console.log(`🚀 Server ready on port ${PORT}`);
+      resolve();
+    })
   );
-  console.log(`🚀 Server ready at: http://localhost:${PORT}/graphql`);
 }
 
 startApolloServer().catch((error) => {
