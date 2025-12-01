@@ -1,4 +1,3 @@
-// src/module/inventory/inventory.resolver.js (o donde lo tengas)
 import connection from "../../Config/connectionSQL.js";
 import { GraphQLError } from "graphql";
 
@@ -198,7 +197,7 @@ const inventoryResolver = {
     },
     AjustarStockProducto: async (_, { input }, ctx) => {
       try {
-        // Validar usuario con el mismo patrón que ya usas
+        
         if (!ctx.usuario) {
           throw new GraphQLError("No autorizado", {
             extensions: {
@@ -223,7 +222,7 @@ const inventoryResolver = {
 
         const { idProducto, nuevoStock, nota } = input;
 
-        // 1) Obtener stock actual del producto
+        
         const [prodRows] = await connection.query(
           `
           SELECT
@@ -314,6 +313,93 @@ const inventoryResolver = {
         });
       }
     },
+    updateProducto: async (_,
+        {
+            id,
+            descripcion,
+            categoria,
+            stockActual,
+            stockMinimo
+        }
+        ) => {
+            try {
+                
+                const [existing] = await connection.query(
+                    `SELECT * FROM productos WHERE id = ?`,
+                    [id]
+                );
+
+                if (existing.length === 0) {
+                    throw new GraphQLError("Producto no encontrado.");
+                }
+
+                const updates = [];
+                const values = [];
+
+                if (descripcion !== undefined) {
+                    updates.push("descripcion = ?");
+                    values.push(descripcion.toUpperCase());
+                }
+
+               if (categoria !== undefined) {
+                    
+                    const [catRows] = await connection.query(
+                      `SELECT id FROM categorias WHERE nombre_cat = ? LIMIT 1`,
+                      [categoria]
+                    );
+
+                    if (catRows.length === 0) {
+                      throw new GraphQLError("Categoría no encontrada.", {
+                        extensions: { code: "BAD_USER_INPUT" },
+                      });
+                    }
+
+                    updates.push("categoria = ?");
+                    values.push(catRows[0].id);
+                  }
+                  
+                if ( stockActual!== undefined) {
+                    updates.push("stock_Actual = ?");
+                    values.push(stockActual);
+                }
+
+                if (stockMinimo !== undefined) {
+                  updates.push("stock_Minimo = ?");
+                    values.push(stockMinimo);
+                }
+
+                if (updates.length > 0) {
+                    values.push(id);
+
+                    await connection.query(
+                        `UPDATE productos SET ${updates.join(", ")} WHERE id = ?`,
+                        values
+                    );
+                }
+
+                const [updatedProduct] = await connection.query(
+                    `SELECT 
+                        p.id, p.descripcion AS nombre, c.nombre_cat AS categoria, 
+                        p.stock_Actual AS stockActual,
+                        p.stock_Minimo AS stockMinimo
+                        FROM productos p
+                        LEFT JOIN categorias c ON p.categoria = c.id
+                        WHERE p.id = ?`,
+                    [id]
+                );
+
+                return {
+                    success: true,
+                    message: "Producto actualizado correctamente.",
+                    producto: updatedProduct[0],
+                };
+            } catch (error) {
+                console.error("Error al actualizar el producto:", error);
+                throw new GraphQLError("Error al actualizar el producto.", {
+                    extensions: { code: "INTERNAL_SERVER_ERROR" },
+                });
+            }
+        },
   },
 };
 

@@ -4,9 +4,10 @@ type Categoria {
   nombre_cat: String!
 }
 
-type ProductoInventario {
+type Producto {
   id: ID!
   nombre: String!
+ 
   categoria: String
   status: Int!
   stockActual: Int!
@@ -31,31 +32,42 @@ input AjustarStockInput {
   nota: String
 }
 
-
 type AjusteInventario {
   id: ID!
   idUsuario: ID!
   agente: String
   idProducto: ID!
-  nombreProducto:String
+  nombreProducto: String
   stock: Int!
   nuevoStock: Int!
   nota: String
   fecha: String
 }
 
+type UpdateProductoResponse {
+  success: Boolean!
+  message: String!
+  producto: Producto
+}
+
 type Query {
   GetCategorias: [Categoria!]!
-  GetInventory: [ProductoInventario!]!
-  GetAjustesInventario:[AjusteInventario]
+  GetInventory: [Producto!]!
+  GetAjustesInventario: [AjusteInventario]
 }
 
 type Mutation {
   CreateCategoria(input: CreateCategoriaInput!): Categoria!
-  CreateProducto(input: CreateProductoInput!): ProductoInventario!
-  AjustarStockProducto(input: AjustarStockInput!): ProductoInventario!
-  }
-
+  CreateProducto(input: CreateProductoInput!): Producto!
+  AjustarStockProducto(input: AjustarStockInput!): Producto!
+  updateProducto(
+    id: ID!
+    descripcion: String
+    categoria: String
+    stockActual: Int
+    stockMinimo: Int
+  ): UpdateProductoResponse!
+}
 `;
 
 export default inventorySchema;
